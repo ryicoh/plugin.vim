@@ -15,14 +15,16 @@ and not as powerful.
 ## Installation
 
 ```bash
-curl -fLo ~/.vim/autoload/plugin.vim --create-dirs \
+curl -sSLo ~/.vim/autoload/plugin.vim --create-dirs \
   https://github.com/ryicoh/plugin.vim/raw/main/autoload/plugin.vim
 ```
 
 ## Usage
 
+For Vim
+
 ```vim
-plugin#use("vim-denops/denops.vim")
+plugin#use("vim-test/vim-test")
 ```
 
 For NeoVim
@@ -31,5 +33,17 @@ if has('nvim')
   set runtimepath+=$HOME/.vim
 endif
 
-plugin#use("vim-denops/denops.vim")
+plugin#use("vim-test/vim-test")
+```
+
+Delete a plugin
+
+```vim
+:call plugin#uninstall("vim-test/vim-test")
+```
+
+Update all plugins
+
+```vim
+:call plugin#update()
 ```
