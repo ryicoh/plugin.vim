@@ -1,16 +1,21 @@
 let g:plugin#location = expand("~/.vim/plugins")
+let g:plugin#plugins = {}
 
 function! plugin#use(repository, ...) abort
-  let options = s:ensure_options(a:0 > 0 ? a:1 : {})
+  let l:options = s:ensure_options(a:0 > 0 ? a:1 : {})
+  let g:plugin#plugins[a:repository] = l:options
 
-  call s:ensure_directory(g:plugin#location)
+  if !isdirectory(g:plugin#location)
+    call system('mkdir -p ' . a:directory)
+  endif
+
   call s:ensure_plugin(a:repository, l:options)
 endfunction
 
 function! plugin#install(repository, options) abort
-  let l:repopath = s:get_repository_path(a:repository)
-  let l:clone_cmd = 'git clone https://github.com/' . a:repository . ' ' . l:repopath
-  if a:options.branch !=# ""
+  let l:plgpath = s:get_plugin_path(a:repository)
+  let l:clone_cmd = 'git clone https://github.com/' . a:repository . ' ' . l:plgpath
+  if a:options.branch != ""
     let l:clone_cmd = l:clone_cmd.' --branch '.a:options.branch
   endif
 
@@ -18,7 +23,7 @@ function! plugin#install(repository, options) abort
   echomsg system(l:clone_cmd)
   call s:load_plugin(a:repository)
 
-  if a:options.build !=# ""
+  if a:options.build != ""
     try
       if type(a:options.build) == type(function("tr"))
         echomsg "build: calling lamdba"
@@ -27,7 +32,7 @@ function! plugin#install(repository, options) abort
         echomsg "build: executing " . a:options.build[1:]
         execute(a:options.build[1:])
       else
-        let l:cmd = "cd ".l:repopath." && ".a:options.build
+        let l:cmd = "cd ".l:plgpath." && ".a:options.build
         echomsg "build: executing " . l:cmd
         call system(l:cmd)
       endif
@@ -38,44 +43,33 @@ function! plugin#install(repository, options) abort
 endfunction
 
 function! plugin#uninstall(repository) abort
-  let l:repopath = s:get_repository_path(a:repository)
-  call system("rm -rf ".l:repopath)
+  let l:plgpath = s:get_plugin_path(a:repository)
+  call system("rm -rf ".l:plgpath)
+endfunction
+
+function! plugin#update() abort
+  for plg in keys(g:plugin#plugins)
+    call plugin#uninstall(plg)
+    call plugin#use(plg, g:plugin#plugins[plg])
+  endfor
 endfunction
 
 function s:ensure_options(custom) abort
-  let l:options = {
-    \ "branch": "",
-    \ "build": "",
+  return {
+    \  "branch": get(a:custom, 'branch', ''),
+    \  "build": get(a:custom, 'build', ''),
     \ }
-
-  if has_key(a:custom, "branch")
-    let l:options.branch = a:custom.branch
-  endif
-
-  if has_key(a:custom, "build")
-    let l:options.build = a:custom.build
-  endif
-
-  return l:options
 endfunction
 
-function! s:ensure_directory(directory) abort
-  if isdirectory(a:directory)
-    return
-  endif
-
-  call system('mkdir -p ' . a:directory)
-endfunction
-
-function! s:get_repository_path(repository) abort
+function! s:get_plugin_path(repository) abort
   return g:plugin#location . '/' . a:repository
 endfunction
 
 function! s:ensure_plugin(repository, options) abort
-  let l:repopath = s:get_repository_path(a:repository)
-  execute 'set runtimepath^=' . l:repopath
+  let l:plgpath = s:get_plugin_path(a:repository)
+  execute 'set runtimepath^=' . l:plgpath
 
-  if !isdirectory(l:repopath)
+  if !isdirectory(l:plgpath)
     call plugin#install(a:repository, a:options)
   else
     call s:load_plugin(a:repository)
@@ -83,8 +77,12 @@ function! s:ensure_plugin(repository, options) abort
 endfunction
 
 function! s:load_plugin(repository) abort
-  let l:repopath = s:get_repository_path(a:repository)
-  let l:plugin_path = globpath(l:repopath, "plugin/*.vim")
+  let l:plgpath = s:get_plugin_path(a:repository)
+  if isdirectory(l:plgpath."/doc")
+    execute 'helptags' l:plgpath."/doc"
+  endif
+
+  let l:plugin_path = globpath(l:plgpath, "plugin/*.vim")
   if l:plugin_path != ""
     execute("source ".l:plugin_path)
   endif
