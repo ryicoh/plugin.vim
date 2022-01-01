@@ -6,6 +6,8 @@ This is similar to [vim-plug](https://github.com/junegunn/vim-plug) and
 [dein.vim](https://github.com/Shougo/dein.vim), but not as fast
 and not as powerful.
 
+Instead, it's written in about 100 lines, so anyone can understand.
+
 
 ## Requirements
 
