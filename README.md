@@ -10,7 +10,7 @@ and not as powerful.
 ## Requirements
 
 * git
-* Vim 8.0 or NeoVim(0.4.0+)
+* Vim 8.0 or NeoVim(0.5.0+)
 
 ## Installation
 
