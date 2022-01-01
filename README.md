@@ -1,5 +1,10 @@
 # plugin.vim
 
+plugin.vim is plugin manager for Vim/NeoVim.
+This is similar to [vim-plug](https://github.com/junegunn/vim-plug) and
+[dein.vim](https://github.com/Shougo/dein.vim), but not as fast
+and not as powerful.
+
 
 ## Requirements
 
