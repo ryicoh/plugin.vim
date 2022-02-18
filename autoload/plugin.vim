@@ -6,7 +6,7 @@ function! plugin#use(repository, ...) abort
   let g:plugin#plugins[a:repository] = l:options
 
   if !isdirectory(g:plugin#location)
-    call system('mkdir -p ' . a:directory)
+    call system('mkdir -p ' . g:plugin#location)
   endif
 
   call s:ensure_plugin(a:repository, l:options)
