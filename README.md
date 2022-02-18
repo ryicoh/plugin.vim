@@ -16,32 +16,30 @@ Instead, it's written in about 100 lines, so anyone can understand.
 
 ## Installation
 
+For Vim
+
 ```bash
 curl -sSLo ~/.vim/autoload/plugin.vim --create-dirs \
   https://github.com/ryicoh/plugin.vim/raw/main/autoload/plugin.vim
 ```
 
-## Usage
+For NeoVim
 
-For Vim
-
-```vim
-call plugin#use("vim-test/vim-test")
+```bash
+curl -sSLo ~/.config/nvim/autoload/plugin.vim --create-dirs \
+  https://github.com/ryicoh/plugin.vim/raw/main/autoload/plugin.vim
 ```
 
-For NeoVim
-```vim
-if has('nvim')
-  set runtimepath+=$HOME/.vim
-endif
+## Usage
 
-call plugin#use("vim-test/vim-test")
+```vim
+call plugin#use("ryicoh/deepl.vim")
 ```
 
 Delete a plugin
 
 ```vim
-:call plugin#uninstall("vim-test/vim-test")
+:call plugin#uninstall("ryicoh/deepl.vim")
 ```
 
 Update all plugins
