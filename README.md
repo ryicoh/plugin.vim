@@ -26,7 +26,7 @@ curl -sSLo ~/.vim/autoload/plugin.vim --create-dirs \
 For Vim
 
 ```vim
-plugin#use("vim-test/vim-test")
+call plugin#use("vim-test/vim-test")
 ```
 
 For NeoVim
@@ -35,7 +35,7 @@ if has('nvim')
   set runtimepath+=$HOME/.vim
 endif
 
-plugin#use("vim-test/vim-test")
+call plugin#use("vim-test/vim-test")
 ```
 
 Delete a plugin
