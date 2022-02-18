@@ -16,7 +16,7 @@ function! plugin#install(repository, options) abort
   let l:plgpath = s:get_plugin_path(a:repository)
   let l:clone_cmd = 'git clone https://github.com/' . a:repository . ' ' . l:plgpath
   if a:options.branch != ""
-    let l:clone_cmd = l:clone_cmd.' --branch '.a:options.branch
+    let l:clone_cmd = l:clone_cmd . ' --branch ' . a:options.branch
   endif
 
   echomsg l:clone_cmd
@@ -44,7 +44,7 @@ endfunction
 
 function! plugin#uninstall(repository) abort
   let l:plgpath = s:get_plugin_path(a:repository)
-  call system("rm -rf ".l:plgpath)
+  call system("rm -rf " . l:plgpath)
 endfunction
 
 function! plugin#update() abort
@@ -79,11 +79,11 @@ endfunction
 function! s:load_plugin(repository) abort
   let l:plgpath = s:get_plugin_path(a:repository)
   if isdirectory(l:plgpath."/doc")
-    execute 'helptags' l:plgpath."/doc"
+    execute 'helptags' l:plgpath . "/doc"
   endif
 
-  let l:plugin_path = globpath(l:plgpath, "plugin/*.vim")
-  if l:plugin_path != ""
-    execute("source ".l:plugin_path)
-  endif
+  let l:plugin_paths = split(globpath("~/.vim/dein/repos/github.com/Shougo/ddu.vim/", "autoload/ddu/*.vim"), "\n")
+  for path in l:plugin_paths
+    execute("source " . path)
+  endfor
 endfunction
