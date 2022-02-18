@@ -32,8 +32,13 @@ curl -sSLo ~/.config/nvim/autoload/plugin.vim --create-dirs \
 
 ## Usage
 
+Example of `.vimrc`
+
 ```vim
-call plugin#use("ryicoh/deepl.vim")
+call plugin#use("vim-denops/denops.vim")
+call plugin#use("Shougo/ddc.vim")
+call plugin#use("prabirshrestha/vim-lsp")
+call plugin#use("mattn/vim-lsp-settings")
 ```
 
 Delete a plugin
